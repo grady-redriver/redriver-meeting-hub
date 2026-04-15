@@ -7,161 +7,164 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --brand:      #B22222;
-      --brand-dark: #8B0000;
-      --brand-light:#fdf2f2;
-      --sidebar-bg: #1a1f2e;
-      --sidebar-txt:#c9d1e0;
-      --sidebar-active: #2d3548;
-      --bg:         #f4f6f9;
-      --card:       #ffffff;
-      --border:     #e2e6ed;
-      --txt:        #1e2533;
-      --txt-muted:  #6b7590;
-      --green:      #22a06b;
-      --green-bg:   #e8f8f2;
-      --tag-bg:     #eef0f5;
-      --shadow:     0 2px 12px rgba(0,0,0,0.08);
+      --brand:#B22222; --brand-dark:#8B0000; --brand-light:#fdf2f2;
+      --sidebar-bg:#1a1f2e; --sidebar-txt:#c9d1e0; --sidebar-active:#2d3548;
+      --bg:#f4f6f9; --card:#ffffff; --border:#e2e6ed; --txt:#1e2533; --txt-muted:#6b7590;
+      --green:#22a06b; --green-bg:#e8f8f2; --tag-bg:#eef0f5; --shadow:0 2px 12px rgba(0,0,0,0.08);
     }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--txt); }
-    #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--sidebar-bg); }
-    #login-box { background: var(--card); border-radius: 16px; padding: 40px 36px; width: 380px; max-width: 95vw; box-shadow: 0 24px 64px rgba(0,0,0,0.3); }
-    .login-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
-    .login-brand-icon { width: 42px; height: 42px; background: var(--brand); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; color: #fff; }
-    .login-brand-name { font-size: 18px; font-weight: 800; color: var(--txt); line-height: 1.1; }
-    .login-brand-sub  { font-size: 12px; color: var(--txt-muted); }
-    .login-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
-    .login-sub   { font-size: 13px; color: var(--txt-muted); margin-bottom: 24px; }
-    .login-field { margin-bottom: 14px; }
-    .login-field label { display: block; font-size: 12px; font-weight: 700; color: var(--txt-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 5px; }
-    .login-field input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; color: var(--txt); background: #fafbfc; transition: border-color .15s; }
-    .login-field input:focus { outline: none; border-color: var(--brand); background: #fff; }
-    #login-btn { width: 100%; margin-top: 8px; padding: 11px; background: var(--brand); color: #fff; border: none; border-radius: 9px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background .15s; }
-    #login-btn:hover { background: var(--brand-dark); }
-    #login-btn:disabled { opacity: .6; cursor: default; }
-    #login-error { display: none; margin-top: 12px; padding: 9px 12px; background: #fde8e8; border: 1px solid #f5c6c6; border-radius: 7px; color: #c0392b; font-size: 13px; }
-    #app { display: none; height: 100vh; overflow: hidden; flex-direction: row; }
-    #app.visible { display: flex; }
-    #sidebar { width: 280px; min-width: 280px; background: var(--sidebar-bg); display: flex; flex-direction: column; overflow: hidden; }
-    #sidebar-header { padding: 20px 18px 14px; border-bottom: 1px solid rgba(255,255,255,0.07); }
-    .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-    .brand-icon { width: 34px; height: 34px; background: var(--brand); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; color: #fff; letter-spacing: -0.5px; }
-    .brand-name { font-size: 15px; font-weight: 700; color: #fff; line-height: 1.1; }
-    .brand-sub  { font-size: 11px; color: var(--sidebar-txt); }
-    #new-meeting-btn { width: 100%; padding: 9px 14px; background: var(--brand); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background .15s; }
-    #new-meeting-btn:hover { background: var(--brand-dark); }
-    #sidebar-nav { padding: 10px 10px 6px; display: flex; gap: 4px; }
-    .nav-tab { flex: 1; padding: 7px 4px; background: transparent; border: none; border-radius: 7px; color: var(--sidebar-txt); font-size: 11px; font-weight: 600; cursor: pointer; text-align: center; transition: background .15s, color .15s; }
-    .nav-tab.active { background: rgba(255,255,255,0.1); color: #fff; }
-    .nav-tab:hover:not(.active) { background: rgba(255,255,255,0.05); }
-    #meeting-list { flex: 1; overflow-y: auto; padding: 6px 10px 16px; }
-    #meeting-list::-webkit-scrollbar { width: 4px; }
-    #meeting-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
-    .meeting-item { padding: 10px 12px; border-radius: 9px; cursor: pointer; margin-bottom: 2px; transition: background .12s; border: 1.5px solid transparent; }
-    .meeting-item:hover { background: var(--sidebar-active); }
-    .meeting-item.active { background: var(--sidebar-active); border-color: var(--brand); }
-    .mi-date { font-size: 10px; font-weight: 600; color: var(--brand); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 3px; }
-    .mi-title { font-size: 13px; font-weight: 600; color: #e8eaf0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .mi-meta  { font-size: 11px; color: var(--sidebar-txt); margin-top: 3px; display: flex; align-items: center; gap: 8px; }
-    .mi-badge { background: rgba(255,255,255,0.1); border-radius: 10px; padding: 1px 7px; font-size: 10px; font-weight: 600; }
-    .mi-badge.done { background: rgba(34,160,107,0.25); color: #4ecba4; }
-    #sidebar-footer { padding: 12px 14px; border-top: 1px solid rgba(255,255,255,0.07); }
-    #logout-btn { width: 100%; padding: 8px; background: transparent; color: var(--sidebar-txt); border: 1px solid rgba(255,255,255,0.12); border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; }
-    #logout-btn:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
-    .save-indicator { text-align: center; font-size: 11px; color: var(--sidebar-txt); padding: 4px 0 8px; min-height: 20px; }
-    .save-indicator.saving { color: #f0c040; }
-    .save-indicator.saved  { color: #4ecba4; }
-    .save-indicator.error  { color: #e74c3c; }
-    .empty-sidebar { text-align: center; color: var(--sidebar-txt); font-size: 12px; padding: 24px 16px; line-height: 1.6; }
-    #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-    #topbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 28px; display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
-    #view-title { flex: 1; font-size: 18px; font-weight: 700; color: var(--txt); }
-    #topbar-actions { display: flex; gap: 8px; align-items: center; }
-    .btn { padding: 7px 14px; border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1.5px solid transparent; transition: all .15s; }
-    .btn-outline { background: transparent; border-color: var(--border); color: var(--txt-muted); }
-    .btn-outline:hover { border-color: #bbb; color: var(--txt); }
-    .btn-danger  { background: transparent; border-color: #f5c6c6; color: #c0392b; }
-    .btn-danger:hover { background: #fdf2f2; }
-    .btn-primary { background: var(--brand); color: #fff; border-color: var(--brand); }
-    .btn-primary:hover { background: var(--brand-dark); border-color: var(--brand-dark); }
-    #content { flex: 1; overflow-y: auto; padding: 28px; }
-    #content::-webkit-scrollbar { width: 6px; }
-    #content::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
-    #welcome { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; gap: 12px; }
-    .welcome-icon { width: 64px; height: 64px; background: var(--brand-light); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
-    #welcome h2 { font-size: 22px; font-weight: 700; }
-    #welcome p  { color: var(--txt-muted); font-size: 14px; max-width: 320px; line-height: 1.6; }
-    .section-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px; margin-bottom: 20px; box-shadow: var(--shadow); }
-    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-    .section-title { font-size: 14px; font-weight: 700; color: var(--txt); display: flex; align-items: center; gap: 8px; }
-    .section-title span { font-size: 16px; }
-    .meeting-meta-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
-    .meta-field label { font-size: 11px; font-weight: 700; color: var(--txt-muted); text-transform: uppercase; letter-spacing: .5px; display: block; margin-bottom: 5px; }
-    .meta-field input, .meta-field textarea { width: 100%; padding: 8px 10px; border: 1.5px solid var(--border); border-radius: 7px; font-size: 13px; color: var(--txt); background: #fafbfc; transition: border-color .15s; font-family: inherit; }
-    .meta-field input:focus, .meta-field textarea:focus { outline: none; border-color: var(--brand); background: #fff; }
-    #agenda-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-    .agenda-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: #fafbfc; border: 1.5px solid var(--border); border-radius: 8px; transition: border-color .15s; }
-    .agenda-item:focus-within { border-color: var(--brand); background: #fff; }
-    .agenda-num { width: 22px; height: 22px; background: var(--brand-light); color: var(--brand); border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .agenda-input { flex: 1; border: none; background: transparent; font-size: 13px; color: var(--txt); font-family: inherit; }
-    .agenda-input:focus { outline: none; }
-    .agenda-time { width: 60px; border: none; background: transparent; font-size: 12px; color: var(--txt-muted); text-align: right; font-family: inherit; }
-    .agenda-time:focus { outline: none; }
-    .remove-btn { background: none; border: none; color: #ccc; cursor: pointer; font-size: 16px; line-height: 1; padding: 0 2px; transition: color .15s; }
-    .remove-btn:hover { color: #e74c3c; }
-    .add-item-btn { margin-top: 8px; background: none; border: 1.5px dashed var(--border); border-radius: 8px; width: 100%; padding: 8px; color: var(--txt-muted); font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; }
-    .add-item-btn:hover { border-color: var(--brand); color: var(--brand); background: var(--brand-light); }
-    #task-input-row { display: flex; gap: 8px; margin-bottom: 14px; }
-    #task-input { flex: 1; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; font-family: inherit; color: var(--txt); background: #fafbfc; transition: border-color .15s; }
-    #task-input:focus { outline: none; border-color: var(--brand); background: #fff; }
-    #task-assignee { width: 140px; padding: 9px 10px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; font-family: inherit; color: var(--txt); background: #fafbfc; }
-    #task-assignee:focus { outline: none; border-color: var(--brand); }
-    #add-task-btn { padding: 9px 16px; background: var(--brand); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background .15s; white-space: nowrap; }
-    #add-task-btn:hover { background: var(--brand-dark); }
-    #task-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-    .task-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: #fafbfc; border: 1.5px solid var(--border); border-radius: 9px; transition: all .15s; }
-    .task-item.done { background: var(--green-bg); border-color: #b8ecd8; }
-    .task-item.done .task-text { text-decoration: line-through; color: var(--txt-muted); }
-    .task-check { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .15s; background: #fff; }
-    .task-item.done .task-check { background: var(--green); border-color: var(--green); color: #fff; font-size: 10px; }
-    .task-text { flex: 1; font-size: 13px; color: var(--txt); }
-    .task-assignee-badge { font-size: 11px; font-weight: 600; color: var(--txt-muted); background: var(--tag-bg); border-radius: 10px; padding: 2px 8px; white-space: nowrap; }
-    .priority-badge { font-size: 10px; font-weight: 700; border-radius: 10px; padding: 2px 8px; white-space: nowrap; }
-    .p-high   { background: #fde8e8; color: #c0392b; }
-    .p-medium { background: #fef3cd; color: #9a6700; }
-    .p-low    { background: #e8f8f2; color: #1a7a4e; }
-    .p-none   { background: var(--tag-bg); color: var(--txt-muted); }
-    .master-filter-bar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-    .filter-btn { padding: 6px 14px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--card); font-size: 12px; font-weight: 600; color: var(--txt-muted); cursor: pointer; transition: all .15s; }
-    .filter-btn.active { background: var(--brand); border-color: var(--brand); color: #fff; }
-    .master-group { margin-bottom: 24px; }
-    .master-group-header { font-size: 11px; font-weight: 700; color: var(--txt-muted); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
-    .task-count-pill { background: var(--tag-bg); border-radius: 10px; padding: 1px 7px; font-size: 10px; font-weight: 700; color: var(--txt-muted); }
-    .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 24px; }
-    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; box-shadow: var(--shadow); }
-    .stat-label { font-size: 11px; font-weight: 700; color: var(--txt-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
-    .stat-value { font-size: 26px; font-weight: 800; color: var(--txt); }
-    .stat-value.green { color: var(--green); }
-    .stat-value.red   { color: var(--brand); }
-    .empty-state { text-align: center; padding: 40px 20px; color: var(--txt-muted); font-size: 13px; }
-    .empty-state .icon { font-size: 36px; margin-bottom: 10px; }
-    #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1000; align-items: center; justify-content: center; }
-    #modal-overlay.open { display: flex; }
-    #modal { background: var(--card); border-radius: 14px; padding: 28px; width: 480px; max-width: 95vw; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
-    #modal h3 { font-size: 17px; font-weight: 700; margin-bottom: 20px; }
-    .modal-field { margin-bottom: 14px; }
-    .modal-field label { display: block; font-size: 12px; font-weight: 700; color: var(--txt-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 5px; }
-    .modal-field input, .modal-field textarea { width: 100%; padding: 9px 11px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; font-family: inherit; color: var(--txt); background: #fafbfc; }
-    .modal-field input:focus, .modal-field textarea:focus { outline: none; border-color: var(--brand); background: #fff; }
-    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
-    @media (max-width: 700px) {
-      #sidebar { width: 240px; min-width: 240px; }
-      .meeting-meta-grid { grid-template-columns: 1fr; }
-      .stats-row { grid-template-columns: repeat(2,1fr); }
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--txt);}
+    #login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--sidebar-bg);}
+    #login-box{background:var(--card);border-radius:16px;padding:40px 36px;width:380px;max-width:95vw;box-shadow:0 24px 64px rgba(0,0,0,0.3);}
+    .login-brand{display:flex;align-items:center;gap:12px;margin-bottom:28px;}
+    .login-brand-icon{width:42px;height:42px;background:var(--brand);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;}
+    .login-brand-name{font-size:18px;font-weight:800;color:var(--txt);line-height:1.1;}
+    .login-brand-sub{font-size:12px;color:var(--txt-muted);}
+    .login-title{font-size:22px;font-weight:700;margin-bottom:6px;}
+    .login-sub{font-size:13px;color:var(--txt-muted);margin-bottom:24px;}
+    .login-field{margin-bottom:14px;}
+    .login-field label{display:block;font-size:12px;font-weight:700;color:var(--txt-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+    .login-field input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;color:var(--txt);background:#fafbfc;transition:border-color .15s;}
+    .login-field input:focus{outline:none;border-color:var(--brand);background:#fff;}
+    #login-btn{width:100%;margin-top:8px;padding:11px;background:var(--brand);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s;}
+    #login-btn:hover{background:var(--brand-dark);}
+    #login-btn:disabled{opacity:.6;cursor:default;}
+    #login-error{display:none;margin-top:12px;padding:9px 12px;background:#fde8e8;border:1px solid #f5c6c6;border-radius:7px;color:#c0392b;font-size:13px;}
+    #app{display:none;height:100vh;overflow:hidden;flex-direction:row;}
+    #app.visible{display:flex;}
+    #sidebar{width:280px;min-width:280px;background:var(--sidebar-bg);display:flex;flex-direction:column;overflow:hidden;}
+    #sidebar-header{padding:20px 18px 14px;border-bottom:1px solid rgba(255,255,255,0.07);}
+    .brand{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+    .brand-icon{width:34px;height:34px;background:var(--brand);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;letter-spacing:-0.5px;}
+    .brand-name{font-size:15px;font-weight:700;color:#fff;line-height:1.1;}
+    .brand-sub{font-size:11px;color:var(--sidebar-txt);}
+    #new-meeting-btn{width:100%;padding:9px 14px;background:var(--brand);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .15s;}
+    #new-meeting-btn:hover{background:var(--brand-dark);}
+    #sidebar-nav{padding:10px 10px 6px;display:flex;gap:4px;}
+    .nav-tab{flex:1;padding:7px 4px;background:transparent;border:none;border-radius:7px;color:var(--sidebar-txt);font-size:11px;font-weight:600;cursor:pointer;text-align:center;transition:background .15s,color .15s;}
+    .nav-tab.active{background:rgba(255,255,255,0.1);color:#fff;}
+    .nav-tab:hover:not(.active){background:rgba(255,255,255,0.05);}
+    #meeting-list{flex:1;overflow-y:auto;padding:6px 10px 16px;}
+    #meeting-list::-webkit-scrollbar{width:4px;}
+    #meeting-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:4px;}
+    .meeting-item{padding:10px 12px;border-radius:9px;cursor:pointer;margin-bottom:2px;transition:background .12s;border:1.5px solid transparent;}
+    .meeting-item:hover{background:var(--sidebar-active);}
+    .meeting-item.active{background:var(--sidebar-active);border-color:var(--brand);}
+    .mi-date{font-size:10px;font-weight:600;color:var(--brand);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+    .mi-title{font-size:13px;font-weight:600;color:#e8eaf0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .mi-meta{font-size:11px;color:var(--sidebar-txt);margin-top:3px;display:flex;align-items:center;gap:8px;}
+    .mi-badge{background:rgba(255,255,255,0.1);border-radius:10px;padding:1px 7px;font-size:10px;font-weight:600;}
+    .mi-badge.done{background:rgba(34,160,107,0.25);color:#4ecba4;}
+    .mi-recur{font-size:10px;color:#e88;background:rgba(178,34,34,0.2);border-radius:10px;padding:1px 6px;}
+    #sidebar-footer{padding:12px 14px;border-top:1px solid rgba(255,255,255,0.07);}
+    #logout-btn{width:100%;padding:8px;background:transparent;color:var(--sidebar-txt);border:1px solid rgba(255,255,255,0.12);border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;}
+    #logout-btn:hover{border-color:rgba(255,255,255,0.3);color:#fff;}
+    .save-indicator{text-align:center;font-size:11px;color:var(--sidebar-txt);padding:4px 0 8px;min-height:20px;}
+    .save-indicator.saving{color:#f0c040;}
+    .save-indicator.saved{color:#4ecba4;}
+    .save-indicator.error{color:#e74c3c;}
+    .empty-sidebar{text-align:center;color:var(--sidebar-txt);font-size:12px;padding:24px 16px;line-height:1.6;}
+    #main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+    #topbar{background:var(--card);border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;gap:16px;flex-shrink:0;}
+    #view-title{flex:1;font-size:18px;font-weight:700;color:var(--txt);}
+    #topbar-actions{display:flex;gap:8px;align-items:center;}
+    .btn{padding:7px 14px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:all .15s;}
+    .btn-outline{background:transparent;border-color:var(--border);color:var(--txt-muted);}
+    .btn-outline:hover{border-color:#bbb;color:var(--txt);}
+    .btn-danger{background:transparent;border-color:#f5c6c6;color:#c0392b;}
+    .btn-danger:hover{background:#fdf2f2;}
+    .btn-primary{background:var(--brand);color:#fff;border-color:var(--brand);}
+    .btn-primary:hover{background:var(--brand-dark);border-color:var(--brand-dark);}
+    #content{flex:1;overflow-y:auto;padding:28px;}
+    #content::-webkit-scrollbar{width:6px;}
+    #content::-webkit-scrollbar-thumb{background:#ccc;border-radius:4px;}
+    #welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;gap:12px;}
+    .welcome-icon{width:64px;height:64px;background:var(--brand-light);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;}
+    #welcome h2{font-size:22px;font-weight:700;}
+    #welcome p{color:var(--txt-muted);font-size:14px;max-width:320px;line-height:1.6;}
+    .section-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:20px;box-shadow:var(--shadow);}
+    .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+    .section-title{font-size:14px;font-weight:700;color:var(--txt);display:flex;align-items:center;gap:8px;}
+    .section-title span{font-size:16px;}
+    .meeting-meta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+    .meta-field label{font-size:11px;font-weight:700;color:var(--txt-muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px;}
+    .meta-field input,.meta-field textarea,.meta-field select{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;color:var(--txt);background:#fafbfc;transition:border-color .15s;font-family:inherit;}
+    .meta-field input:focus,.meta-field textarea:focus{outline:none;border-color:var(--brand);background:#fff;}
+    .recurrence-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 14px;background:var(--brand-light);border:1.5px solid #f5c6c6;border-radius:9px;margin-bottom:16px;font-size:13px;}
+    .recurrence-bar strong{color:var(--brand);flex:1;min-width:160px;}
+    .recurrence-bar .next-date{color:var(--txt-muted);font-size:12px;}
+    .new-week-btn{padding:6px 14px;background:var(--brand);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s;}
+    .new-week-btn:hover{background:var(--brand-dark);}
+    .history-toggle{margin-top:12px;background:none;border:1.5px dashed var(--border);border-radius:8px;width:100%;padding:8px;color:var(--txt-muted);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;}
+    .history-toggle:hover{border-color:var(--brand);color:var(--brand);}
+    #agenda-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
+    .agenda-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:#fafbfc;border:1.5px solid var(--border);border-radius:8px;transition:border-color .15s;}
+    .agenda-item:focus-within{border-color:var(--brand);background:#fff;}
+    .agenda-num{width:22px;height:22px;background:var(--brand-light);color:var(--brand);border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .agenda-input{flex:1;border:none;background:transparent;font-size:13px;color:var(--txt);font-family:inherit;}
+    .agenda-input:focus{outline:none;}
+    .agenda-time{width:60px;border:none;background:transparent;font-size:12px;color:var(--txt-muted);text-align:right;font-family:inherit;}
+    .agenda-time:focus{outline:none;}
+    .remove-btn{background:none;border:none;color:#ccc;cursor:pointer;font-size:16px;line-height:1;padding:0 2px;transition:color .15s;}
+    .remove-btn:hover{color:#e74c3c;}
+    .add-item-btn{margin-top:8px;background:none;border:1.5px dashed var(--border);border-radius:8px;width:100%;padding:8px;color:var(--txt-muted);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;}
+    .add-item-btn:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-light);}
+    #task-input-row{display:flex;gap:8px;margin-bottom:14px;}
+    #task-input{flex:1;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--txt);background:#fafbfc;transition:border-color .15s;}
+    #task-input:focus{outline:none;border-color:var(--brand);background:#fff;}
+    #task-assignee{width:140px;padding:9px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--txt);background:#fafbfc;}
+    #task-assignee:focus{outline:none;border-color:var(--brand);}
+    #add-task-btn{padding:9px 16px;background:var(--brand);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;white-space:nowrap;}
+    #add-task-btn:hover{background:var(--brand-dark);}
+    #task-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
+    .task-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#fafbfc;border:1.5px solid var(--border);border-radius:9px;transition:all .15s;}
+    .task-item.done{background:var(--green-bg);border-color:#b8ecd8;}
+    .task-item.done .task-text{text-decoration:line-through;color:var(--txt-muted);}
+    .task-item.archived-item{opacity:.65;background:#f8f8f8;}
+    .task-check{width:18px;height:18px;border:2px solid var(--border);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;background:#fff;}
+    .task-item.done .task-check{background:var(--green);border-color:var(--green);color:#fff;font-size:10px;}
+    .task-text{flex:1;font-size:13px;color:var(--txt);}
+    .task-assignee-badge{font-size:11px;font-weight:600;color:var(--txt-muted);background:var(--tag-bg);border-radius:10px;padding:2px 8px;white-space:nowrap;}
+    .carried-badge{font-size:10px;font-weight:700;background:#fff3e0;color:#e65100;border-radius:10px;padding:2px 8px;white-space:nowrap;}
+    .priority-badge{font-size:10px;font-weight:700;border-radius:10px;padding:2px 8px;white-space:nowrap;}
+    .p-high{background:#fde8e8;color:#c0392b;}
+    .p-medium{background:#fef3cd;color:#9a6700;}
+    .p-low{background:#e8f8f2;color:#1a7a4e;}
+    .p-none{background:var(--tag-bg);color:var(--txt-muted);}
+    .master-filter-bar{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+    .filter-btn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);font-size:12px;font-weight:600;color:var(--txt-muted);cursor:pointer;transition:all .15s;}
+    .filter-btn.active{background:var(--brand);border-color:var(--brand);color:#fff;}
+    .master-group{margin-bottom:24px;}
+    .master-group-header{font-size:11px;font-weight:700;color:var(--txt-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+    .task-count-pill{background:var(--tag-bg);border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;color:var(--txt-muted);}
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+    .stat-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;box-shadow:var(--shadow);}
+    .stat-label{font-size:11px;font-weight:700;color:var(--txt-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+    .stat-value{font-size:26px;font-weight:800;color:var(--txt);}
+    .stat-value.green{color:var(--green);}
+    .stat-value.red{color:var(--brand);}
+    .empty-state{text-align:center;padding:40px 20px;color:var(--txt-muted);font-size:13px;}
+    .empty-state .icon{font-size:36px;margin-bottom:10px;}
+    #modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:1000;align-items:center;justify-content:center;}
+    #modal-overlay.open{display:flex;}
+    #modal{background:var(--card);border-radius:14px;padding:28px;width:480px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,0.2);max-height:90vh;overflow-y:auto;}
+    #modal h3{font-size:17px;font-weight:700;margin-bottom:20px;}
+    .modal-field{margin-bottom:14px;}
+    .modal-field label{display:block;font-size:12px;font-weight:700;color:var(--txt-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+    .modal-field input,.modal-field textarea,.modal-field select{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--txt);background:#fafbfc;}
+    .modal-field input:focus,.modal-field textarea:focus{outline:none;border-color:var(--brand);background:#fff;}
+    .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;}
+    .recur-checkbox-label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt);text-transform:none;letter-spacing:0;font-weight:400;cursor:pointer;}
+    .recur-checkbox-label input[type=checkbox]{width:16px;height:16px;accent-color:var(--brand);cursor:pointer;}
+    #m-recur-opts{display:none;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;}
+    @media(max-width:700px){
+      #sidebar{width:240px;min-width:240px;}
+      .meeting-meta-grid{grid-template-columns:1fr;}
+      .stats-row{grid-template-columns:repeat(2,1fr);}
     }
   </style>
 </head>
 <body>
+
 <div id="login-screen">
   <div id="login-box">
     <div class="login-brand">
@@ -185,6 +188,7 @@
     <div id="login-error"></div>
   </div>
 </div>
+
 <div id="app">
   <div id="sidebar">
     <div id="sidebar-header">
@@ -217,12 +221,13 @@
       <div id="welcome">
         <div class="welcome-icon">📋</div>
         <h2>Welcome, Grady</h2>
-        <p>Create a new meeting to get started, or jump into My Tasks to track everything in one place.</p>
+        <p>Select a meeting from the sidebar, or create a new one to add an agenda and tasks.</p>
         <button class="btn btn-primary" style="margin-top:8px" onclick="openNewMeetingModal()">＋ New Meeting</button>
       </div>
     </div>
   </div>
 </div>
+
 <div id="modal-overlay">
   <div id="modal">
     <h3>New Meeting</h3>
@@ -230,98 +235,414 @@
     <div class="modal-field"><label>Date &amp; Time</label><input type="datetime-local" id="m-date" /></div>
     <div class="modal-field"><label>Location / Link</label><input type="text" id="m-location" placeholder="Teams call, Conf Room A, etc." /></div>
     <div class="modal-field"><label>Attendees</label><input type="text" id="m-attendees" placeholder="John, Sarah, Mike..." /></div>
-    <div class="modal-field"><label>Notes (optional)</label><textarea id="m-notes" rows="2" placeholder="Anything to note before the meeting..."></textarea></div>
+    <div class="modal-field"><label>Notes (optional)</label><textarea id="m-notes" rows="2" placeholder="Anything to note..."></textarea></div>
+    <div class="modal-field">
+      <label>Recurring Meeting</label>
+      <label class="recur-checkbox-label">
+        <input type="checkbox" id="m-recurring" onchange="document.getElementById('m-recur-opts').style.display=this.checked?'grid':'none'" />
+        This meeting repeats on a schedule
+      </label>
+    </div>
+    <div id="m-recur-opts">
+      <div class="modal-field" style="margin-bottom:0">
+        <label>Repeats</label>
+        <select id="m-interval">
+          <option value="weekly">Every Week</option>
+          <option value="biweekly">Every 2 Weeks</option>
+          <option value="monthly">Every Month</option>
+        </select>
+      </div>
+      <div class="modal-field" style="margin-bottom:0">
+        <label>Day of Week</label>
+        <select id="m-dayofweek">
+          <option value="0">Sunday</option>
+          <option value="1">Monday</option>
+          <option value="2">Tuesday</option>
+          <option value="3">Wednesday</option>
+          <option value="4">Thursday</option>
+          <option value="5">Friday</option>
+          <option value="6">Saturday</option>
+        </select>
+      </div>
+    </div>
     <div class="modal-actions">
       <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
       <button class="btn btn-primary" onclick="saveMeeting()">Create Meeting</button>
     </div>
   </div>
 </div>
+
 <script>
-  let meetings = [], tasks = [], activeMeetingId = null, currentView = 'meetings', taskFilter = 'all', saveTimer = null;
-  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
-  function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-  function fmtDate(iso) { if (!iso) return ''; return new Date(iso).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}); }
-  async function doLogin() {
-    const btn=document.getElementById('login-btn'),errEl=document.getElementById('login-error');
-    const user=document.getElementById('login-username').value.trim(),pass=document.getElementById('login-password').value;
-    if (!user||!pass){showLoginError('Please enter your username and password.');return;}
-    btn.disabled=true;btn.textContent='Signing in…';errEl.style.display='none';
-    try{const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:user,password:pass})});
-      if(r.ok){await loadApp();}else{const d=await r.json();showLoginError(d.error||'Invalid credentials.');}}
-    catch(e){showLoginError('Connection error. Please try again.');}
-    btn.disabled=false;btn.textContent='Sign In';
+const DAY_NAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const INTERVAL_LABELS={weekly:'Weekly',biweekly:'Every 2 Weeks',monthly:'Monthly'};
+let meetings=[],tasks=[],activeMeetingId=null,currentView='meetings',taskFilter='all',saveTimer=null;
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmtDate(iso){if(!iso)return '';return new Date(iso).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});}
+function fmtShort(iso){if(!iso)return '';return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric'});}
+
+function getNextOccurrenceDate(m){
+  const now=new Date();now.setHours(0,0,0,0);
+  const timeStr=m.date&&m.date.length>10?m.date.slice(11,16):'09:00';
+  if(m.recurrenceInterval==='monthly'){
+    const dom=m.date?new Date(m.date).getDate():now.getDate();
+    const next=new Date(now.getFullYear(),now.getMonth(),dom);
+    if(next<=now)next.setMonth(next.getMonth()+1);
+    return next.toISOString().slice(0,10)+'T'+timeStr;
   }
-  function showLoginError(msg){const el=document.getElementById('login-error');el.textContent=msg;el.style.display='block';}
-  async function doLogout(){await fetch('/api/logout',{method:'POST'});document.getElementById('app').classList.remove('visible');document.getElementById('login-screen').style.display='flex';document.getElementById('login-password').value='';}
-  async function loadApp(){
-    document.getElementById('login-screen').style.display='none';document.getElementById('app').classList.add('visible');
-    const r=await fetch('/api/data');if(r.ok){const d=await r.json();meetings=d.meetings||[];tasks=d.tasks||[];}
-    renderSidebar();showWelcome();
+  const target=m.recurrenceDayOfWeek??1;
+  const days=m.recurrenceInterval==='biweekly'?14:7;
+  const d=new Date(now);
+  let diff=(target-d.getDay()+7)%7;
+  if(diff===0)diff=days;
+  d.setDate(d.getDate()+diff);
+  return d.toISOString().slice(0,10)+'T'+timeStr;
+}
+
+function recurLabel(m){
+  const day=DAY_NAMES[m.recurrenceDayOfWeek??1];
+  return (INTERVAL_LABELS[m.recurrenceInterval]||'Recurring')+' · '+day;
+}
+
+function startNewOccurrence(id){
+  const m=meetings.find(x=>x.id===id);if(!m)return;
+  const incomplete=tasks.filter(t=>t.meetingId===id&&!t.done&&!t.archived);
+  const msg=incomplete.length
+    ?`Start a new week for "${m.title}"?\n\n✅ Completed tasks will be archived.\n↩ ${incomplete.length} incomplete task(s) will carry over.`
+    :`Start a new week for "${m.title}"?\n\nCompleted tasks will be archived.`;
+  if(!confirm(msg))return;
+  tasks.filter(t=>t.meetingId===id&&t.done&&!t.archived).forEach(t=>{t.archived=true;t.archivedDate=new Date().toISOString().slice(0,10);});
+  incomplete.forEach(t=>{t.carriedOver=true;});
+  m.date=getNextOccurrenceDate(m);
+  save();renderMeetingDetail(id);renderSidebar();
+}
+
+async function doLogin(){
+  const btn=document.getElementById('login-btn'),errEl=document.getElementById('login-error');
+  const user=document.getElementById('login-username').value.trim(),pass=document.getElementById('login-password').value;
+  if(!user||!pass){showLoginError('Please enter your username and password.');return;}
+  btn.disabled=true;btn.textContent='Signing in…';errEl.style.display='none';
+  try{
+    const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:user,password:pass})});
+    if(r.ok){await loadApp();}else{const d=await r.json();showLoginError(d.error||'Invalid credentials.');}
+  }catch(e){showLoginError('Connection error. Please try again.');}
+  btn.disabled=false;btn.textContent='Sign In';
+}
+function showLoginError(msg){const el=document.getElementById('login-error');el.textContent=msg;el.style.display='block';}
+async function doLogout(){await fetch('/api/logout',{method:'POST'});document.getElementById('app').classList.remove('visible');document.getElementById('login-screen').style.display='flex';document.getElementById('login-password').value='';}
+
+async function loadApp(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').classList.add('visible');
+  const r=await fetch('/api/data');
+  if(r.ok){const d=await r.json();meetings=d.meetings||[];tasks=d.tasks||[];}
+  renderSidebar();showWelcome();
+}
+function scheduleSave(){
+  clearTimeout(saveTimer);setSaveStatus('saving','● Saving…');
+  saveTimer=setTimeout(async()=>{
+    try{
+      const r=await fetch('/api/data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({meetings,tasks})});
+      if(r.ok)setSaveStatus('saved','✓ Saved');else setSaveStatus('error','✕ Save failed');
+    }catch(e){setSaveStatus('error','✕ Connection error');}
+    setTimeout(()=>setSaveStatus('',''),2500);
+  },600);
+}
+function setSaveStatus(cls,msg){const el=document.getElementById('save-indicator');el.className='save-indicator'+(cls?' '+cls:'');el.textContent=msg;}
+function save(){scheduleSave();}
+
+function switchView(view,btn){
+  currentView=view;document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');
+  activeMeetingId=null;renderSidebar();
+  if(view==='meetings')showWelcome();
+  else if(view==='mytasks')renderMyTasks();
+  else renderMasterTasks();
+}
+function showWelcome(){
+  document.getElementById('view-title').textContent='Meeting Hub';
+  document.getElementById('topbar-actions').innerHTML='';
+  document.getElementById('content').innerHTML=`<div id="welcome"><div class="welcome-icon">📋</div><h2>Welcome, Grady</h2><p>Select a meeting or create a new one to add an agenda and tasks.</p><button class="btn btn-primary" style="margin-top:8px" onclick="openNewMeetingModal()">＋ New Meeting</button></div>`;
+}
+
+function renderSidebar(){
+  const list=document.getElementById('meeting-list');
+  if(currentView!=='meetings'){list.innerHTML='';return;}
+  if(!meetings.length){list.innerHTML=`<div class="empty-sidebar">No meetings yet.<br>Click <strong>+ New Meeting</strong> to get started.</div>`;return;}
+  const sorted=[...meetings].sort((a,b)=>{
+    if(a.recurring&&!b.recurring)return -1;
+    if(!a.recurring&&b.recurring)return 1;
+    return(b.date||'').localeCompare(a.date||'');
+  });
+  list.innerHTML=sorted.map(m=>{
+    const mt=tasks.filter(t=>t.meetingId===m.id&&!t.archived);
+    const dn=mt.filter(t=>t.done).length;
+    const dateLabel=m.recurring?`🔁 ${recurLabel(m)}`:(fmtDate(m.date)||'No date');
+    return `<div class="meeting-item ${m.id===activeMeetingId?'active':''}" onclick="openMeeting('${m.id}')">
+      <div class="mi-date">${dateLabel}</div>
+      <div class="mi-title">${esc(m.title)}</div>
+      <div class="mi-meta">
+        ${mt.length?`<span class="mi-badge ${dn===mt.length&&mt.length>0?'done':''}">${dn}/${mt.length} tasks</span>`:''}
+        ${m.recurring?`<span class="mi-recur">Next: ${fmtShort(m.date)}</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openMeeting(id){activeMeetingId=id;currentView='meetings';document.querySelectorAll('.nav-tab').forEach((t,i)=>t.classList.toggle('active',i===0));renderSidebar();renderMeetingDetail(id);}
+
+function renderMeetingDetail(id){
+  const m=meetings.find(x=>x.id===id);if(!m)return;
+  document.getElementById('view-title').textContent=m.title;
+  document.getElementById('topbar-actions').innerHTML=`<button class="btn btn-outline" onclick="openNewMeetingModal()">＋ New Meeting</button><button class="btn btn-danger" onclick="deleteMeeting('${id}')">Delete</button>`;
+  const agendaHTML=(m.agenda||[]).map((a,i)=>agendaItemHTML(a,i)).join('');
+  const activeTasks=tasks.filter(t=>t.meetingId===id&&!t.archived);
+  const archivedTasks=tasks.filter(t=>t.meetingId===id&&t.archived);
+  const recurrenceBar=m.recurring?`
+    <div class="recurrence-bar">
+      <strong>🔁 ${recurLabel(m)}</strong>
+      <span class="next-date">Next: ${fmtDate(m.date)||'–'}</span>
+      <button class="new-week-btn" onclick="startNewOccurrence('${id}')">📅 Start New Week</button>
+    </div>`:'';
+  const archivedHTML=archivedTasks.length?`
+    <button class="history-toggle" id="hist-btn" onclick="toggleHistory()">📂 Show Past Tasks (${archivedTasks.length})</button>
+    <ul id="archived-list" style="list-style:none;display:none;flex-direction:column;gap:6px;margin-top:8px">
+      ${archivedTasks.map(t=>taskItemHTML(t,false,true)).join('')}
+    </ul>`:'';
+  const recurFields=m.recurring?`<div class="meta-field" style="grid-column:1/-1">
+    <label>Recurrence</label>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <select id="f-interval" onchange="saveRecurrence('${id}')">
+        <option value="weekly" ${m.recurrenceInterval==='weekly'?'selected':''}>Every Week</option>
+        <option value="biweekly" ${m.recurrenceInterval==='biweekly'?'selected':''}>Every 2 Weeks</option>
+        <option value="monthly" ${m.recurrenceInterval==='monthly'?'selected':''}>Every Month</option>
+      </select>
+      <select id="f-dayofweek" onchange="saveRecurrence('${id}')">
+        ${DAY_NAMES.map((d,i)=>`<option value="${i}" ${m.recurrenceDayOfWeek===i?'selected':''}>${d}</option>`).join('')}
+      </select>
+    </div>
+  </div>`:'';
+  document.getElementById('content').innerHTML=`
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title"><span>📅</span> Meeting Details</div>
+        <button class="btn btn-outline" style="font-size:12px;padding:5px 11px" onclick="saveMetaFields('${id}')">Save</button>
+      </div>
+      <div class="meeting-meta-grid">
+        <div class="meta-field"><label>Title</label><input id="f-title" value="${esc(m.title)}" /></div>
+        <div class="meta-field"><label>Date &amp; Time</label><input type="datetime-local" id="f-date" value="${m.date||''}" /></div>
+        <div class="meta-field"><label>Location / Link</label><input id="f-location" value="${esc(m.location||'')}" /></div>
+        <div class="meta-field" style="grid-column:1/-1"><label>Attendees</label><input id="f-attendees" value="${esc(m.attendees||'')}" placeholder="Names separated by commas" /></div>
+        <div class="meta-field" style="grid-column:1/-1"><label>Notes</label><textarea id="f-notes" rows="2">${esc(m.notes||'')}</textarea></div>
+        ${recurFields}
+      </div>
+    </div>
+    <div class="section-card">
+      <div class="section-header"><div class="section-title"><span>📝</span> Agenda</div></div>
+      <ul id="agenda-list">${agendaHTML}</ul>
+      <button class="add-item-btn" onclick="addAgendaItem('${id}')">+ Add Agenda Item</button>
+    </div>
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title"><span>✅</span> Tasks
+          <span style="font-size:12px;font-weight:400;color:var(--txt-muted);margin-left:4px">${activeTasks.filter(t=>t.done).length}/${activeTasks.length} done</span>
+        </div>
+      </div>
+      ${recurrenceBar}
+      <div id="task-input-row">
+        <input type="text" id="task-input" placeholder="Add a task..." onkeydown="if(event.key==='Enter') addTask('${id}')" />
+        <input type="text" id="task-assignee" placeholder="Assign to..." />
+        <button id="add-task-btn" onclick="addTask('${id}')">+ Add</button>
+      </div>
+      <ul id="task-list">
+        ${activeTasks.map(t=>taskItemHTML(t,false,false)).join('')||`<div class="empty-state"><div class="icon">☑️</div>No tasks yet. Add one above.</div>`}
+      </ul>
+      ${archivedHTML}
+    </div>`;
+}
+
+function toggleHistory(){
+  const ul=document.getElementById('archived-list');
+  const btn=document.getElementById('hist-btn');
+  const showing=ul.style.display!=='none';
+  ul.style.display=showing?'none':'flex';
+  btn.textContent=showing?btn.textContent.replace('Hide','Show'):btn.textContent.replace('Show','Hide');
+}
+
+function saveRecurrence(id){
+  const m=meetings.find(x=>x.id===id);if(!m)return;
+  m.recurrenceInterval=document.getElementById('f-interval').value;
+  m.recurrenceDayOfWeek=parseInt(document.getElementById('f-dayofweek').value);
+  save();renderSidebar();
+}
+
+function agendaItemHTML(a,i){return `<li class="agenda-item"><div class="agenda-num">${i+1}</div><input class="agenda-input" value="${esc(a.text||'')}" placeholder="Agenda item…" oninput="updateAgendaItem(${i},'text',this.value)" /><input class="agenda-time" value="${esc(a.duration||'')}" placeholder="~mins" oninput="updateAgendaItem(${i},'duration',this.value)" /><button class="remove-btn" onclick="removeAgendaItem(${i})">✕</button></li>`;}
+function updateAgendaItem(idx,field,val){const m=meetings.find(x=>x.id===activeMeetingId);if(!m)return;if(!m.agenda)m.agenda=[];if(!m.agenda[idx])m.agenda[idx]={};m.agenda[idx][field]=val;save();}
+function addAgendaItem(id){const m=meetings.find(x=>x.id===id);if(!m)return;if(!m.agenda)m.agenda=[];m.agenda.push({text:'',duration:''});save();renderMeetingDetail(id);setTimeout(()=>{const items=document.querySelectorAll('.agenda-input');if(items.length)items[items.length-1].focus();},50);}
+function removeAgendaItem(idx){const m=meetings.find(x=>x.id===activeMeetingId);if(!m||!m.agenda)return;m.agenda.splice(idx,1);save();renderMeetingDetail(activeMeetingId);}
+
+function taskItemHTML(t,showSource,isArchived){
+  const pCls={high:'p-high',medium:'p-medium',low:'p-low','':'p-none'}[t.priority||'']||'p-none';
+  const pLabel={high:'High',medium:'Medium',low:'Low','':''}[t.priority||''];
+  return `<li class="task-item ${t.done?'done':''} ${isArchived?'archived-item':''}">
+    <div class="task-check" onclick="${isArchived?'':''}">${t.done?'✓':''}</div>
+    <span class="task-text">${esc(t.text)}</span>
+    ${t.carriedOver&&!isArchived?`<span class="carried-badge">↩ Carried over</span>`:''}
+    ${pLabel?`<span class="priority-badge ${pCls}">${pLabel}</span>`:''}
+    ${t.assignee?`<span class="task-assignee-badge">👤 ${esc(t.assignee)}</span>`:''}
+    ${isArchived&&t.archivedDate?`<span style="font-size:10px;color:var(--txt-muted)">${t.archivedDate}</span>`:''}
+    ${showSource&&t.meetingTitle?`<span style="font-size:10px;color:var(--brand);background:var(--brand-light);border-radius:10px;padding:2px 8px">📅 ${esc(t.meetingTitle)}</span>`:''}
+    ${!isArchived?`<button class="remove-btn" onclick="deleteTask('${t.id}')">✕</button>`:''}
+  </li>`;
+}
+
+function addTask(meetingId){
+  const inp=document.getElementById('task-input'),asgn=document.getElementById('task-assignee'),text=inp?.value.trim();
+  if(!text){inp?.focus();return;}
+  const m=meetings.find(x=>x.id===meetingId);
+  tasks.push({id:uid(),meetingId,meetingTitle:m?m.title:'',text,assignee:asgn?.value.trim()||'',priority:'',done:false,archived:false,carriedOver:false,createdAt:new Date().toISOString()});
+  inp.value='';asgn.value='';
+  save();renderMeetingDetail(meetingId);renderSidebar();
+  setTimeout(()=>document.getElementById('task-input')?.focus(),50);
+}
+function toggleTask(taskId){
+  const t=tasks.find(x=>x.id===taskId);if(!t)return;
+  t.done=!t.done;save();
+  if(currentView==='tasks')renderMasterTasks();
+  else if(currentView==='mytasks')renderMyTasks();
+  else renderMeetingDetail(activeMeetingId);
+  renderSidebar();
+}
+function deleteTask(taskId){
+  tasks=tasks.filter(x=>x.id!==taskId);save();
+  if(currentView==='tasks')renderMasterTasks();
+  else if(currentView==='mytasks')renderMyTasks();
+  else renderMeetingDetail(activeMeetingId);
+  renderSidebar();
+}
+
+function renderMyTasks(){
+  document.getElementById('view-title').textContent='My Tasks';
+  document.getElementById('topbar-actions').innerHTML='';
+  const myTasks=tasks.filter(t=>!t.meetingId&&!t.archived);
+  const open=myTasks.filter(t=>!t.done),done=myTasks.filter(t=>t.done);
+  const pg=[{key:'high',label:'🔴 High Priority'},{key:'medium',label:'🟡 Medium Priority'},{key:'low',label:'🟢 Low Priority'},{key:'',label:'⬜ No Priority'}];
+  const openHTML=pg.map(p=>{const g=open.filter(t=>(t.priority||'')===p.key);if(!g.length)return '';return `<div class="master-group"><div class="master-group-header">${p.label} <span class="task-count-pill">${g.length}</span></div><ul style="list-style:none;display:flex;flex-direction:column;gap:6px">${g.map(t=>myTaskItemHTML(t)).join('')}</ul></div>`;}).join('');
+  const doneHTML=done.length?`<div class="master-group"><div class="master-group-header" style="cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'flex':'none'">✅ Completed <span class="task-count-pill">${done.length}</span><span style="margin-left:auto;font-size:11px;color:var(--txt-muted)">click to toggle</span></div><ul style="list-style:none;display:flex;flex-direction:column;gap:6px">${done.map(t=>myTaskItemHTML(t)).join('')}</ul></div>`:'';
+  document.getElementById('content').innerHTML=`
+    <div class="section-card" style="margin-bottom:20px">
+      <div class="section-header"><div class="section-title"><span>➕</span> Add Task</div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <input type="text" id="my-task-input" placeholder="What needs to get done?" style="flex:1;min-width:200px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--txt);background:#fafbfc" onkeydown="if(event.key==='Enter') addMyTask()" />
+        <input type="text" id="my-task-assignee" placeholder="Assign to…" style="width:140px;padding:9px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--txt);background:#fafbfc" />
+        <select id="my-task-priority" style="padding:9px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--txt);background:#fafbfc">
+          <option value="">No Priority</option><option value="high">🔴 High</option><option value="medium">🟡 Medium</option><option value="low">🟢 Low</option>
+        </select>
+        <button onclick="addMyTask()" style="padding:9px 18px;background:var(--brand);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">+ Add</button>
+      </div>
+    </div>
+    <div class="stats-row" style="grid-template-columns:repeat(3,1fr)">
+      <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value">${myTasks.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Open</div><div class="stat-value red">${open.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Done</div><div class="stat-value green">${done.length}</div></div>
+    </div>
+    ${open.length?openHTML:`<div class="empty-state"><div class="icon">🎉</div>No open tasks — all caught up!</div>`}
+    ${doneHTML}`;
+  document.getElementById('my-task-input')?.focus();
+}
+function myTaskItemHTML(t){
+  const pCls={high:'p-high',medium:'p-medium',low:'p-low','':'p-none'}[t.priority||'']||'p-none';
+  const pLabel={high:'High',medium:'Medium',low:'Low','':''}[t.priority||''];
+  return `<li class="task-item ${t.done?'done':''}" id="task-${t.id}"><div class="task-check" onclick="toggleTask('${t.id}')">${t.done?'✓':''}</div><span class="task-text">${esc(t.text)}</span>${pLabel?`<span class="priority-badge ${pCls}">${pLabel}</span>`:''}${t.assignee?`<span class="task-assignee-badge">👤 ${esc(t.assignee)}</span>`:''}<button class="remove-btn" onclick="deleteTask('${t.id}')">✕</button></li>`;
+}
+function addMyTask(){
+  const inp=document.getElementById('my-task-input'),asgn=document.getElementById('my-task-assignee'),pri=document.getElementById('my-task-priority'),text=inp?.value.trim();
+  if(!text){inp?.focus();return;}
+  tasks.push({id:uid(),meetingId:null,meetingTitle:'',text,assignee:asgn?.value.trim()||'',priority:pri?.value||'',done:false,archived:false,createdAt:new Date().toISOString()});
+  save();renderMyTasks();renderSidebar();
+}
+
+function renderMasterTasks(){
+  document.getElementById('view-title').textContent='All Tasks';
+  document.getElementById('topbar-actions').innerHTML='';
+  const allActive=tasks.filter(t=>!t.archived);
+  const total=allActive.length,done=allActive.filter(t=>t.done).length,open=total-done,pct=total?Math.round(done/total*100):0;
+  let filtered=allActive;
+  if(taskFilter==='open')filtered=allActive.filter(t=>!t.done);
+  if(taskFilter==='done')filtered=allActive.filter(t=>t.done);
+  const groups={};
+  filtered.forEach(t=>{const k=t.meetingId||'__my__';if(!groups[k])groups[k]={title:t.meetingId?(t.meetingTitle||'Meeting'):'⭐ My Tasks',icon:t.meetingId?'📅':'',tasks:[]};groups[k].tasks.push(t);});
+  const sorted=Object.entries(groups).sort(([a],[b])=>a==='__my__'?-1:b==='__my__'?1:0);
+  const groupsHTML=sorted.map(([,g])=>`<div class="master-group"><div class="master-group-header">${g.icon?g.icon+' ':''}${esc(g.title)} <span class="task-count-pill">${g.tasks.length}</span></div><ul style="list-style:none;display:flex;flex-direction:column;gap:6px">${g.tasks.map(t=>taskItemHTML(t,false,false)).join('')}</ul></div>`).join('');
+  document.getElementById('content').innerHTML=`
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">Total Tasks</div><div class="stat-value">${total}</div></div>
+      <div class="stat-card"><div class="stat-label">Open</div><div class="stat-value red">${open}</div></div>
+      <div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value green">${done}</div></div>
+      <div class="stat-card"><div class="stat-label">Progress</div><div class="stat-value">${pct}%</div></div>
+    </div>
+    <div class="master-filter-bar">
+      <button class="filter-btn ${taskFilter==='all'?'active':''}" onclick="setFilter('all')">All (${total})</button>
+      <button class="filter-btn ${taskFilter==='open'?'active':''}" onclick="setFilter('open')">Open (${open})</button>
+      <button class="filter-btn ${taskFilter==='done'?'active':''}" onclick="setFilter('done')">Completed (${done})</button>
+    </div>
+    ${filtered.length?groupsHTML:`<div class="empty-state"><div class="icon">☑️</div>No tasks match this filter.</div>`}`;
+}
+function setFilter(f){taskFilter=f;renderMasterTasks();}
+
+function saveMetaFields(id){
+  const m=meetings.find(x=>x.id===id);if(!m)return;
+  m.title=document.getElementById('f-title').value.trim()||m.title;
+  m.date=document.getElementById('f-date').value;
+  m.location=document.getElementById('f-location').value.trim();
+  m.attendees=document.getElementById('f-attendees').value.trim();
+  m.notes=document.getElementById('f-notes').value.trim();
+  tasks.filter(t=>t.meetingId===id).forEach(t=>t.meetingTitle=m.title);
+  save();document.getElementById('view-title').textContent=m.title;renderSidebar();
+  const btn=document.querySelector('[onclick*="saveMetaFields"]');
+  if(btn){btn.textContent='✓ Saved';setTimeout(()=>btn.textContent='Save',1500);}
+}
+function deleteMeeting(id){
+  if(!confirm('Delete this meeting and all its tasks?'))return;
+  meetings=meetings.filter(x=>x.id!==id);tasks=tasks.filter(t=>t.meetingId!==id);
+  activeMeetingId=null;save();renderSidebar();showWelcome();
+}
+function openNewMeetingModal(){
+  ['m-title','m-date','m-location','m-attendees','m-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('m-recurring').checked=false;
+  document.getElementById('m-recur-opts').style.display='none';
+  document.getElementById('modal-overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('m-title').focus(),100);
+}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
+function saveMeeting(){
+  const title=document.getElementById('m-title').value.trim();
+  if(!title){document.getElementById('m-title').focus();return;}
+  const id=uid();
+  const recurring=document.getElementById('m-recurring').checked;
+  const recurrenceInterval=document.getElementById('m-interval').value;
+  const recurrenceDayOfWeek=parseInt(document.getElementById('m-dayofweek').value);
+  let date=document.getElementById('m-date').value;
+  if(recurring&&!date){
+    const tmp={recurring:true,recurrenceInterval,recurrenceDayOfWeek,date:''};
+    date=getNextOccurrenceDate(tmp);
   }
-  function scheduleSave(){
-    clearTimeout(saveTimer);setSaveStatus('saving','● Saving…');
-    saveTimer=setTimeout(async()=>{
-      try{const r=await fetch('/api/data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({meetings,tasks})});
-        if(r.ok)setSaveStatus('saved','✓ Saved');else setSaveStatus('error','✕ Save failed');}
-      catch(e){setSaveStatus('error','✕ Connection error');}
-      setTimeout(()=>setSaveStatus('',''),2500);},600);
-  }
-  function setSaveStatus(cls,msg){const el=document.getElementById('save-indicator');el.className='save-indicator'+(cls?' '+cls:'');el.textContent=msg;}
-  function save(){scheduleSave();}
-  function switchView(view,btn){currentView=view;document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');activeMeetingId=null;renderSidebar();if(view==='meetings')showWelcome();else if(view==='mytasks')renderMyTasks();else renderMasterTasks();}
-  function showWelcome(){document.getElementById('view-title').textContent='Meeting Hub';document.getElementById('topbar-actions').innerHTML='';document.getElementById('content').innerHTML=`<div id="welcome"><div class="welcome-icon">📋</div><h2>Welcome, Grady</h2><p>Select a meeting from the sidebar, or create a new one to add an agenda and tasks.</p><button class="btn btn-primary" style="margin-top:8px" onclick="openNewMeetingModal()">＋ New Meeting</button></div>`;}
-  function renderSidebar(){
-    const list=document.getElementById('meeting-list');if(currentView!=='meetings'){list.innerHTML='';return;}
-    if(!meetings.length){list.innerHTML=`<div class="empty-sidebar">No meetings yet.<br>Click <strong>+ New Meeting</strong> to get started.</div>`;return;}
-    const sorted=[...meetings].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-    list.innerHTML=sorted.map(m=>{const mt=tasks.filter(t=>t.meetingId===m.id),dn=mt.filter(t=>t.done).length;
-      return `<div class="meeting-item ${m.id===activeMeetingId?'active':''}" onclick="openMeeting('${m.id}')"><div class="mi-date">${fmtDate(m.date)||'No date'}</div><div class="mi-title">${esc(m.title)}</div><div class="mi-meta">${mt.length?`<span class="mi-badge ${dn===mt.length&&mt.length>0?'done':''}">${dn}/${mt.length} tasks</span>`:''} ${m.attendees?`<span style="font-size:10px">${esc(m.attendees.split(',')[0].trim())}${m.attendees.split(',').length>1?' +'+(m.attendees.split(',').length-1):''}</span>`:''}</div></div>`;}).join('');
-  }
-  function openMeeting(id){activeMeetingId=id;currentView='meetings';document.querySelectorAll('.nav-tab').forEach((t,i)=>t.classList.toggle('active',i===0));renderSidebar();renderMeetingDetail(id);}
-  function renderMeetingDetail(id){
-    const m=meetings.find(x=>x.id===id);if(!m)return;
-    document.getElementById('view-title').textContent=m.title;
-    document.getElementById('topbar-actions').innerHTML=`<button class="btn btn-outline" onclick="openNewMeetingModal()">＋ New Meeting</button><button class="btn btn-danger" onclick="deleteMeeting('${id}')">Delete</button>`;
-    const agendaHTML=(m.agenda||[]).map((a,i)=>agendaItemHTML(a,i)).join(''),mt=tasks.filter(t=>t.meetingId===id);
-    document.getElementById('content').innerHTML=`<div class="section-card"><div class="section-header"><div class="section-title"><span>📅</span> Meeting Details</div><button class="btn btn-outline" style="font-size:12px;padding:5px 11px" onclick="saveMetaFields('${id}')">Save</button></div><div class="meeting-meta-grid"><div class="meta-field"><label>Title</label><input id="f-title" value="${esc(m.title)}" /></div><div class="meta-field"><label>Date &amp; Time</label><input type="datetime-local" id="f-date" value="${m.date||''}" /></div><div class="meta-field"><label>Location / Link</label><input id="f-location" value="${esc(m.location||'')}" /></div><div class="meta-field" style="grid-column:1/-1"><label>Attendees</label><input id="f-attendees" value="${esc(m.attendees||'')}" placeholder="Names separated by commas" /></div><div class="meta-field" style="grid-column:1/-1"><label>Notes</label><textarea id="f-notes" rows="2">${esc(m.notes||'')}</textarea></div></div></div><div class="section-card"><div class="section-header"><div class="section-title"><span>📝</span> Agenda</div></div><ul id="agenda-list">${agendaHTML}</ul><button class="add-item-btn" onclick="addAgendaItem('${id}')">+ Add Agenda Item</button></div><div class="section-card"><div class="section-header"><div class="section-title"><span>✅</span> Tasks <span style="font-size:12px;font-weight:400;color:var(--txt-muted);margin-left:4px">${mt.filter(t=>t.done).length}/${mt.length} done</span></div></div><div id="task-input-row"><input type="text" id="task-input" placeholder="Add a task..." onkeydown="if(event.key==='Enter') addTask('${id}')" /><input type="text" id="task-assignee" placeholder="Assign to..." /><button id="add-task-btn" onclick="addTask('${id}')">+ Add</button></div><ul id="task-list">${mt.map(t=>taskItemHTML(t,false)).join('')||`<div class="empty-state"><div class="icon">☑️</div>No tasks yet. Add one above.</div>`}</ul></div>`;
-  }
-  function agendaItemHTML(a,i){return `<li class="agenda-item" data-idx="${i}"><div class="agenda-num">${i+1}</div><input class="agenda-input" value="${esc(a.text||'')}" placeholder="Agenda item…" oninput="updateAgendaItem(${i},'text',this.value)" /><input class="agenda-time" value="${esc(a.duration||'')}" placeholder="~mins" oninput="updateAgendaItem(${i},'duration',this.value)" /><button class="remove-btn" onclick="removeAgendaItem(${i})">✕</button></li>`;}
-  function updateAgendaItem(idx,field,val){const m=meetings.find(x=>x.id===activeMeetingId);if(!m)return;if(!m.agenda)m.agenda=[];if(!m.agenda[idx])m.agenda[idx]={};m.agenda[idx][field]=val;save();}
-  function addAgendaItem(id){const m=meetings.find(x=>x.id===id);if(!m)return;if(!m.agenda)m.agenda=[];m.agenda.push({text:'',duration:''});save();renderMeetingDetail(id);setTimeout(()=>{const items=document.querySelectorAll('.agenda-input');if(items.length)items[items.length-1].focus();},50);}
-  function removeAgendaItem(idx){const m=meetings.find(x=>x.id===activeMeetingId);if(!m||!m.agenda)return;m.agenda.splice(idx,1);save();renderMeetingDetail(activeMeetingId);}
-  function taskItemHTML(t,showSource){const pCls={high:'p-high',medium:'p-medium',low:'p-low','':'p-none'}[t.priority||'']||'p-none',pLabel={high:'High',medium:'Medium',low:'Low','':''}[t.priority||''];return `<li class="task-item ${t.done?'done':''}" id="task-${t.id}"><div class="task-check" onclick="toggleTask('${t.id}')">${t.done?'✓':''}</div><span class="task-text">${esc(t.text)}</span>${pLabel?`<span class="priority-badge ${pCls}">${pLabel}</span>`:''}${t.assignee?`<span class="task-assignee-badge">👤 ${esc(t.assignee)}</span>`:''}${showSource&&t.meetingTitle?`<span style="font-size:10px;color:var(--brand);background:var(--brand-light);border-radius:10px;padding:2px 8px">📅 ${esc(t.meetingTitle)}</span>`:''}<button class="remove-btn" onclick="deleteTask('${t.id}')">✕</button></li>`;}
-  function addTask(meetingId){const inp=document.getElementById('task-input'),asgn=document.getElementById('task-assignee'),text=inp?.value.trim();if(!text){inp?.focus();return;}const m=meetings.find(x=>x.id===meetingId);tasks.push({id:uid(),meetingId,meetingTitle:m?m.title:'',text,assignee:asgn?.value.trim()||'',priority:'',done:false,createdAt:new Date().toISOString()});inp.value='';asgn.value='';save();renderMeetingDetail(meetingId);renderSidebar();setTimeout(()=>document.getElementById('task-input')?.focus(),50);}
-  function toggleTask(taskId){const t=tasks.find(x=>x.id===taskId);if(!t)return;t.done=!t.done;save();if(currentView==='tasks')renderMasterTasks();else if(currentView==='mytasks')renderMyTasks();else renderMeetingDetail(activeMeetingId);renderSidebar();}
-  function deleteTask(taskId){tasks=tasks.filter(x=>x.id!==taskId);save();if(currentView==='tasks')renderMasterTasks();else if(currentView==='mytasks')renderMyTasks();else renderMeetingDetail(activeMeetingId);renderSidebar();}
-  function renderMyTasks(){
-    document.getElementById('view-title').textContent='My Tasks';document.getElementById('topbar-actions').innerHTML='';
-    const myTasks=tasks.filter(t=>!t.meetingId),open=myTasks.filter(t=>!t.done),done=myTasks.filter(t=>t.done);
-    const priorityGroups=[{key:'high',label:'🔴 High Priority'},{key:'medium',label:'🟡 Medium Priority'},{key:'low',label:'🟢 Low Priority'},{key:'',label:'⬜ No Priority'}];
-    const openGroupsHTML=priorityGroups.map(pg=>{const grp=open.filter(t=>(t.priority||'')===pg.key);if(!grp.length)return '';return `<div class="master-group"><div class="master-group-header">${pg.label} <span class="task-count-pill">${grp.length}</span></div><ul style="list-style:none;display:flex;flex-direction:column;gap:6px">${grp.map(t=>myTaskItemHTML(t)).join('')}</ul></div>`;}).join('');
-    const doneHTML=done.length?`<div class="master-group"><div class="master-group-header" style="cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'flex':'none'">✅ Completed <span class="task-count-pill">${done.length}</span><span style="margin-left:auto;font-size:11px;color:var(--txt-muted)">click to toggle</span></div><ul style="list-style:none;display:flex;flex-direction:column;gap:6px">${done.map(t=>myTaskItemHTML(t)).join('')}</ul></div>`:'';
-    document.getElementById('content').innerHTML=`<div class="section-card" style="margin-bottom:20px"><div class="section-header"><div class="section-title"><span>➕</span> Add Task</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><input type="text" id="my-task-input" placeholder="What needs to get done?" style="flex:1;min-width:200px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--txt);background:#fafbfc" onkeydown="if(event.key==='Enter') addMyTask()" /><input type="text" id="my-task-assignee" placeholder="Assign to…" style="width:140px;padding:9px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--txt);background:#fafbfc" /><select id="my-task-priority" style="padding:9px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--txt);background:#fafbfc"><option value="">No Priority</option><option value="high">🔴 High</option><option value="medium">🟡 Medium</option><option value="low">🟢 Low</option></select><button onclick="addMyTask()" style="padding:9px 18px;background:var(--brand);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">+ Add</button></div></div><div class="stats-row" style="grid-template-columns:repeat(3,1fr)"><div class="stat-card"><div class="stat-label">Total</div><div class="stat-value">${myTasks.length}</div></div><div class="stat-card"><div class="stat-label">Open</div><div class="stat-value red">${open.length}</div></div><div class="stat-card"><div class="stat-label">Done</div><div class="stat-value green">${done.length}</div></div></div>${open.length?openGroupsHTML:`<div class="empty-state"><div class="icon">🎉</div>No open tasks — you're all caught up!</div>`}${doneHTML}`;
-    document.getElementById('my-task-input')?.focus();
-  }
-  function myTaskItemHTML(t){const pCls={high:'p-high',medium:'p-medium',low:'p-low','':'p-none'}[t.priority||'']||'p-none',pLabel={high:'High',medium:'Medium',low:'Low','':''}[t.priority||''];return `<li class="task-item ${t.done?'done':''}" id="task-${t.id}"><div class="task-check" onclick="toggleTask('${t.id}')">${t.done?'✓':''}</div><span class="task-text">${esc(t.text)}</span>${pLabel?`<span class="priority-badge ${pCls}">${pLabel}</span>`:''}${t.assignee?`<span class="task-assignee-badge">👤 ${esc(t.assignee)}</span>`:''}<button class="remove-btn" onclick="deleteTask('${t.id}')">✕</button></li>`;}
-  function addMyTask(){const inp=document.getElementById('my-task-input'),asgn=document.getElementById('my-task-assignee'),pri=document.getElementById('my-task-priority'),text=inp?.value.trim();if(!text){inp?.focus();return;}tasks.push({id:uid(),meetingId:null,meetingTitle:'',text,assignee:asgn?.value.trim()||'',priority:pri?.value||'',done:false,createdAt:new Date().toISOString()});save();renderMyTasks();renderSidebar();}
-  function renderMasterTasks(){
-    document.getElementById('view-title').textContent='All Tasks';document.getElementById('topbar-actions').innerHTML='';
-    const total=tasks.length,done=tasks.filter(t=>t.done).length,open=total-done,pct=total?Math.round(done/total*100):0;
-    let filtered=tasks;if(taskFilter==='open')filtered=tasks.filter(t=>!t.done);if(taskFilter==='done')filtered=tasks.filter(t=>t.done);
-    const groups={};filtered.forEach(t=>{const key=t.meetingId||'__mytasks__';if(!groups[key])groups[key]={title:t.meetingId?(t.meetingTitle||'Meeting'):'⭐ My Tasks',icon:t.meetingId?'📅':'',tasks:[]};groups[key].tasks.push(t);});
-    const sorted=Object.entries(groups).sort(([a],[b])=>{if(a==='__mytasks__')return -1;if(b==='__mytasks__')return 1;return 0;});
-    const groupsHTML=sorted.map(([,g])=>`<div class="master-group"><div class="master-group-header">${g.icon?g.icon+' ':''}${esc(g.title)} <span class="task-count-pill">${g.tasks.length}</span></div><ul style="list-style:none;display:flex;flex-direction:column;gap:6px">${g.tasks.map(t=>taskItemHTML(t,false)).join('')}</ul></div>`).join('');
-    document.getElementById('content').innerHTML=`<div class="stats-row"><div class="stat-card"><div class="stat-label">Total Tasks</div><div class="stat-value">${total}</div></div><div class="stat-card"><div class="stat-label">Open</div><div class="stat-value red">${open}</div></div><div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value green">${done}</div></div><div class="stat-card"><div class="stat-label">Progress</div><div class="stat-value">${pct}%</div></div></div><div class="master-filter-bar"><button class="filter-btn ${taskFilter==='all'?'active':''}" onclick="setFilter('all')">All (${total})</button><button class="filter-btn ${taskFilter==='open'?'active':''}" onclick="setFilter('open')">Open (${open})</button><button class="filter-btn ${taskFilter==='done'?'active':''}" onclick="setFilter('done')">Completed (${done})</button></div>${filtered.length?groupsHTML:`<div class="empty-state"><div class="icon">☑️</div>No tasks match this filter.</div>`}`;
-  }
-  function setFilter(f){taskFilter=f;renderMasterTasks();}
-  function saveMetaFields(id){const m=meetings.find(x=>x.id===id);if(!m)return;m.title=document.getElementById('f-title').value.trim()||m.title;m.date=document.getElementById('f-date').value;m.location=document.getElementById('f-location').value.trim();m.attendees=document.getElementById('f-attendees').value.trim();m.notes=document.getElementById('f-notes').value.trim();tasks.filter(t=>t.meetingId===id).forEach(t=>t.meetingTitle=m.title);save();document.getElementById('view-title').textContent=m.title;renderSidebar();const btn=document.querySelector('[onclick*="saveMetaFields"]');if(btn){btn.textContent='✓ Saved';setTimeout(()=>btn.textContent='Save',1500);}}
-  function deleteMeeting(id){if(!confirm('Delete this meeting and all its tasks?'))return;meetings=meetings.filter(x=>x.id!==id);tasks=tasks.filter(t=>t.meetingId!==id);activeMeetingId=null;save();renderSidebar();showWelcome();}
-  function openNewMeetingModal(){['m-title','m-date','m-location','m-attendees','m-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('modal-overlay').classList.add('open');setTimeout(()=>document.getElementById('m-title').focus(),100);}
-  function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
-  function saveMeeting(){const title=document.getElementById('m-title').value.trim();if(!title){document.getElementById('m-title').focus();return;}const id=uid();meetings.push({id,title,date:document.getElementById('m-date').value,location:document.getElementById('m-location').value.trim(),attendees:document.getElementById('m-attendees').value.trim(),notes:document.getElementById('m-notes').value.trim(),agenda:[]});save();closeModal();openMeeting(id);}
-  document.getElementById('modal-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('modal-overlay'))closeModal();});
-  (async()=>{const r=await fetch('/api/me'),d=await r.json();if(d.authenticated){await loadApp();}else{document.getElementById('login-screen').style.display='flex';setTimeout(()=>document.getElementById('login-username').focus(),100);}})();
+  meetings.push({id,title,date,
+    location:document.getElementById('m-location').value.trim(),
+    attendees:document.getElementById('m-attendees').value.trim(),
+    notes:document.getElementById('m-notes').value.trim(),
+    agenda:[],recurring,
+    recurrenceInterval:recurring?recurrenceInterval:null,
+    recurrenceDayOfWeek:recurring?recurrenceDayOfWeek:null
+  });
+  save();closeModal();openMeeting(id);
+}
+document.getElementById('modal-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('modal-overlay'))closeModal();});
+
+(async()=>{
+  const r=await fetch('/api/me'),d=await r.json();
+  if(d.authenticated){await loadApp();}
+  else{document.getElementById('login-screen').style.display='flex';setTimeout(()=>document.getElementById('login-username').focus(),100);}
+})();
 </script>
 </body>
 </html>
