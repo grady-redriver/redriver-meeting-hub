@@ -1,23 +1,46 @@
 const express = require('express');
 const session = require('express-session');
 const path    = require('path');
-const fs      = require('fs');
+const { MongoClient } = require('mongodb');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
-
 const USERNAME       = process.env.APP_USERNAME  || 'grady';
 const PASSWORD       = process.env.APP_PASSWORD  || 'redriver';
 const SESSION_SECRET = process.env.SESSION_SECRET || 'rr-change-this-secret';
+const MONGODB_URI    = process.env.MONGODB_URI;
 
-const DATA_DIR = path.join(__dirname, 'data');
-const DB_PATH  = path.join(DATA_DIR, 'db.json');
+let dataCollection;
+let memData = { meetings: [], tasks: [] };
 
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-if (!fs.existsSync(DB_PATH))  fs.writeFileSync(DB_PATH, JSON.stringify({ meetings: [], tasks: [] }, null, 2));
+async function connectDB() {
+  if (!MONGODB_URI) { console.log('No MONGODB_URI — using in-memory storage'); return; }
+  try {
+    const client = new MongoClient(MONGODB_URI);
+    await client.connect();
+    const db = client.db('redriver-hub');
+    dataCollection = db.collection('appdata');
+    const exists = await dataCollection.findOne({ _id: 'main' });
+    if (!exists) await dataCollection.insertOne({ _id: 'main', meetings: [], tasks: [] });
+    console.log('✅ Connected to MongoDB');
+  } catch(e) { console.error('MongoDB connection failed:', e.message); }
+}
 
-function readDB()      { return JSON.parse(fs.readFileSync(DB_PATH, 'utf8')); }
-function writeDB(data) { fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2)); }
+async function readDB() {
+  if (dataCollection) {
+    const doc = await dataCollection.findOne({ _id: 'main' });
+    return { meetings: doc?.meetings || [], tasks: doc?.tasks || [] };
+  }
+  return memData;
+}
+
+async function writeDB(data) {
+  if (dataCollection) {
+    await dataCollection.updateOne({ _id: 'main' }, { $set: { meetings: data.meetings, tasks: data.tasks } }, { upsert: true });
+  } else {
+    memData = data;
+  }
+}
 
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -50,19 +73,19 @@ app.get('/api/me', (req, res) => {
   res.json({ authenticated: !!(req.session && req.session.authenticated) });
 });
 
-app.get('/api/data', requireAuth, (req, res) => {
-  res.json(readDB());
+app.get('/api/data', requireAuth, async (req, res) => {
+  res.json(await readDB());
 });
 
-app.post('/api/data', requireAuth, (req, res) => {
+app.post('/api/data', requireAuth, async (req, res) => {
   try {
     const { meetings, tasks } = req.body;
-    if (!Array.isArray(meetings) || !Array.isArray(tasks)) {
+    if (!Array.isArray(meetings) || !Array.isArray(tasks))
       return res.status(400).json({ error: 'Invalid data format.' });
-    }
-    writeDB({ meetings, tasks });
+    await writeDB({ meetings, tasks });
     res.json({ ok: true });
-  } catch (e) {
+  } catch(e) {
+    console.error('Save error:', e);
     res.status(500).json({ error: 'Failed to save data.' });
   }
 });
@@ -72,6 +95,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`Red River Meeting Hub running on port ${PORT}`);
+connectDB().then(() => {
+  app.listen(PORT, () => console.log(`Red River Meeting Hub running on port ${PORT}`));
 });
